@@ -1,0 +1,10 @@
+go 1.24.6
+
+use (
+	./GoCache
+	./GoGee
+	./GoGorm
+	./GoLock
+	./GoMQ
+	./GoRPC
+)
