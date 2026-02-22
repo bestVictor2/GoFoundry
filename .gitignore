@@ -23,6 +23,9 @@ coverage.out
 *.db
 *.sqlite
 *.sqlite3
+GoBench/reports/*.json
+GoBench/bench_*
+GoBench/flag_*
 
 # Env / secrets
 .env
