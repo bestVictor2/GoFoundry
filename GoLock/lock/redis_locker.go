@@ -15,7 +15,7 @@ type Locker interface {
 }
 
 type RedisLocker struct {
-	client        redis.UniversalClient
+	client        redis.UniversalClient // 单机 redis 哨兵 cluster
 	prefix        string
 	retryInterval time.Duration
 	tokenGen      TokenGenerator
@@ -43,20 +43,20 @@ func NewRedisLocker(client redis.UniversalClient, opts ...Option) *RedisLocker {
 func (l *RedisLocker) TryLock(ctx context.Context, key string, ttl time.Duration) (*Lease, error) {
 	if err := validateLockArgs(key, ttl); err != nil {
 		return nil, err
-	}
+	} // 参数校验的地方
 
 	token, err := l.tokenGen.NextToken()
 	if err != nil {
 		return nil, err
 	}
 
-	ok, err := l.client.SetNX(ctx, l.formatKey(key), token, ttl).Result()
+	ok, err := l.client.SetNX(ctx, l.formatKey(key), token, ttl).Result() // 原子化
 	if err != nil {
 		return nil, err
 	}
 	if !ok {
 		return nil, ErrNotAcquired
-	}
+	} // 未抢到锁
 
 	return &Lease{
 		key:    key,
@@ -89,8 +89,8 @@ func (l *RedisLocker) Lock(ctx context.Context, key string, ttl, wait time.Durat
 		case <-ctx.Done():
 			return nil, ctx.Err()
 		case <-timer.C:
-			return nil, ErrNotAcquired
-		case <-ticker.C:
+			return nil, ErrNotAcquired // 时间耗尽
+		case <-ticker.C: //到达重试时间
 		}
 	}
 }

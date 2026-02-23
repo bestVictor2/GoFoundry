@@ -1,0 +1,40 @@
+﻿# 全量单元测试日志
+# 时间: 2026-02-23 21:21:41 +08:00
+
+
+## [GoGee] go test -count=1 ./...
+?   	GoGee	[no test files]
+ok  	GoGee/Gee	0.085s
+
+
+## [GoGorm] go test -count=1 ./...
+?   	GoGorm	[no test files]
+ok  	GoGorm/clause	0.037s
+?   	GoGorm/dialect	[no test files]
+ok  	GoGorm/gorm	0.106s
+?   	GoGorm/log	[no test files]
+ok  	GoGorm/schema	0.041s
+ok  	GoGorm/session	0.165s
+
+
+## [GoCache] go test -count=1 ./...
+?   	GoCache	[no test files]
+ok  	GoCache/geecache	0.136s
+ok  	GoCache/geecache/consistenthash	0.043s
+?   	GoCache/geecache/singleflight	[no test files]
+ok  	GoCache/lru	0.044s
+
+
+## [GoLock] go test -count=1 ./...
+?   	GoLock	[no test files]
+ok  	GoLock/lock	0.541s
+
+
+## [GoMQ] go test -count=1 ./...
+?   	GoMQ	[no test files]
+ok  	GoMQ/mq	0.062s
+
+
+## [GoBench] go test -count=1 ./...
+ok  	GoBench	0.047s
+

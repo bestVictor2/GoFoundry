@@ -44,7 +44,7 @@ func buildLatencySummary(latencies []time.Duration) (avg, min, p50, p90, p95, p9
 	values := make([]float64, len(latencies))
 	total := 0.0
 	for i, lat := range latencies {
-		ms := float64(lat.Microseconds()) / 1000.0
+		ms := float64(lat.Microseconds()) / 1000.0 // ms
 		values[i] = ms
 		total += ms
 	}
@@ -59,7 +59,7 @@ func buildLatencySummary(latencies []time.Duration) (avg, min, p50, p90, p95, p9
 	return
 }
 
-func percentile(sorted []float64, p int) float64 {
+func percentile(sorted []float64, p int) float64 { // 百分位算法
 	if len(sorted) == 0 {
 		return 0
 	}
@@ -97,7 +97,7 @@ func printSummary(report Report, reportPath string) {
 	fmt.Printf("report: %s\n", reportPath)
 }
 
-func sanitizeFileName(name string) string {
+func sanitizeFileName(name string) string { // 不同平台的安全设计
 	name = strings.TrimSpace(name)
 	if name == "" {
 		return "benchmark"

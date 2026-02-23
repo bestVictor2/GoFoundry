@@ -12,8 +12,8 @@ type Message struct {
 	Body        []byte
 	Headers     map[string]interface{}
 	ContentType string
-	Mandatory   bool
-	Immediate   bool
+	Mandatory   bool // 路由失败是否返回
+	Immediate   bool // 是否立即投递
 }
 
 func (c *Client) PublishJSON(ctx context.Context, payload interface{}, headers map[string]interface{}) error {

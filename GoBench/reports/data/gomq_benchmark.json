@@ -1,0 +1,25 @@
+﻿{
+    "framework":  "GoMQ",
+    "mode":  "benchmark",
+    "run_at":  "2026-02-23T21:27:03+08:00",
+    "benchmarks":  [
+                       {
+                           "name":  "PublishJSON",
+                           "iterations":  2912690,
+                           "ns_per_op":  409.7,
+                           "ms_per_op":  0.00041,
+                           "qps":  2440810.35,
+                           "bytes_per_op":  288,
+                           "allocs_per_op":  8
+                       },
+                       {
+                           "name":  "ProcessDeliveryAck",
+                           "iterations":  23925066,
+                           "ns_per_op":  50.71,
+                           "ms_per_op":  5.1E-05,
+                           "qps":  19719976.34,
+                           "bytes_per_op":  40,
+                           "allocs_per_op":  3
+                       }
+                   ]
+}

@@ -21,6 +21,7 @@ type amqpChannel interface {
 	Close() error
 }
 
+// 可注入依赖写法
 var dialAMQP = func(url string) (amqpConnection, error) {
 	conn, err := amqp.Dial(url)
 	if err != nil {
@@ -61,11 +62,11 @@ func (r *realChannel) QueueBind(name, key, exchange string, noWait bool, args am
 	return r.ch.QueueBind(name, key, exchange, noWait, args)
 }
 
-func (r *realChannel) Qos(prefetchCount, prefetchSize int, global bool) error {
+func (r *realChannel) Qos(prefetchCount, prefetchSize int, global bool) error { // 关于 Qos 一条 consumer 最多持有多少条未 ack 消息
 	return r.ch.Qos(prefetchCount, prefetchSize, global)
 }
 
-func (r *realChannel) PublishWithContext(ctx context.Context, exchange, key string, mandatory, immediate bool, msg amqp.Publishing) error {
+func (r *realChannel) PublishWithContext(ctx context.Context, exchange, key string, mandatory, immediate bool, msg amqp.Publishing) error { // 把一条消息投递到 exchange
 	return r.ch.PublishWithContext(ctx, exchange, key, mandatory, immediate, msg)
 }
 

@@ -18,11 +18,11 @@ func main() {
 		httpCfg HTTPBenchConfig
 		gormCfg GormBenchConfig
 	)
-
+	// mode 压测模式 name 压测场景名称 report 报告输出路径
 	flag.StringVar(&mode, "mode", "http", "benchmark mode: http | gorm")
 	flag.StringVar(&name, "name", "benchmark", "benchmark scenario name")
 	flag.StringVar(&report, "report", "", "report output path, default reports/<name>-<mode>.json")
-
+	// concurrency 并发数
 	flag.StringVar(&httpCfg.URL, "url", "http://localhost:9999/healthz", "http mode: request url")
 	flag.StringVar(&httpCfg.Method, "method", "GET", "http mode: request method")
 	flag.IntVar(&httpCfg.Total, "total", 2000, "http mode: total requests")

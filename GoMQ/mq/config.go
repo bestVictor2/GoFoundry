@@ -4,17 +4,17 @@ type Topology struct {
 	Exchange     string
 	ExchangeType string
 	Queue        string
-	RoutingKey   string
-	Durable      bool
-	AutoDelete   bool
-	Exclusive    bool
-	NoWait       bool
+	RoutingKey   string // exchange - > queue
+	Durable      bool   // 持久化参数
+	AutoDelete   bool   // no consumer
+	Exclusive    bool   // 是否只属于当前连接
+	NoWait       bool   // 是否异步声明
 }
 
 type ConsumerConfig struct {
 	Tag            string
 	AutoAck        bool
-	PrefetchCount  int
+	PrefetchCount  int // 最多持有多少条未 ack 消息
 	RequeueOnError bool
 }
 
@@ -24,7 +24,7 @@ type Config struct {
 	Consumer ConsumerConfig
 }
 
-func DefaultConfig(url, queue string) Config {
+func DefaultConfig(url, queue string) Config { // 默认可靠队列，串行消费，失败重试
 	return Config{
 		URL: url,
 		Topology: Topology{
@@ -51,7 +51,7 @@ func (c Config) Normalize() Config {
 	return c
 }
 
-func (c Config) Validate() error {
+func (c Config) Validate() error { // 参数校验
 	if c.URL == "" {
 		return ErrURLRequired
 	}

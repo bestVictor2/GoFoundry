@@ -8,7 +8,7 @@ type Client struct {
 }
 
 func Dial(cfg Config) (*Client, error) {
-	cfg = cfg.Normalize()
+	cfg = cfg.Normalize() // 自动补充默认值
 	if err := cfg.Validate(); err != nil {
 		return nil, err
 	}
@@ -30,11 +30,11 @@ func Dial(cfg Config) (*Client, error) {
 		ch:   ch,
 	}
 
-	if err = client.declareTopology(); err != nil {
+	if err = client.declareTopology(); err != nil { //声明拓扑
 		_ = client.Close()
 		return nil, err
 	}
-	if err = client.applyQoS(); err != nil {
+	if err = client.applyQoS(); err != nil { //设置 qos
 		_ = client.Close()
 		return nil, err
 	}
@@ -49,12 +49,12 @@ func (c *Client) Close() error {
 	c.closed = true
 
 	var err error
-	if c.ch != nil {
+	if c.ch != nil { // 关闭 connection
 		if closeErr := c.ch.Close(); closeErr != nil {
 			err = closeErr
 		}
 	}
-	if c.conn != nil {
+	if c.conn != nil { // 关闭 channel
 		if closeErr := c.conn.Close(); closeErr != nil && err == nil {
 			err = closeErr
 		}

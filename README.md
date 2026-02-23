@@ -170,62 +170,20 @@ cd GoMQ
 go run . -mode=consume -queue=demo.queue
 ```
 
-## 6. 数据采集（GoBench）
+## 6. 数据采集（GoBench） && 测试
 
-### 6.1 HTTP 压测示例（压 GoGee / GoCache）
+请参考 GoBen 中的 README.md 文件
 
-```powershell
-cd GoBench
-go run . -mode=http -name=gee-health -url=http://localhost:9999/healthz -method=GET -total=3000 -concurrency=100 -timeout=3s
-```
+## 7. 开源来源与合规说明
 
-### 6.2 GORM 基准示例
-
-```powershell
-cd GoBench
-go run . -mode=gorm -name=gorm-crud -db=bench_gorm.db -insert=2000 -query=500 -update=500 -delete=500
-```
-
-### 6.3 指定报告路径
-
-```powershell
-go run . -mode=http -name=cache-batch -url=http://localhost:9999/api/batch?keys=Tom,Sam -report=reports/cache-batch.json
-```
-
-## 7. 测试
-
-```powershell
-$env:GO111MODULE='on'
-
-cd GoGee
-go test ./...
-
-cd ..\GoGorm
-go test ./...
-
-cd ..\GoCache
-go test ./...
-
-cd ..\GoLock
-go test ./...
-
-cd ..\GoMQ
-go test ./...
-
-cd ..\GoBench
-go test ./...
-```
-
-## 8. 开源来源与合规说明
-
-`GoGee`、`GoGorm`、`GoCache` 的设计与部分实现思路参考：
+`GoGee`、`GoGorm`、`GoCache` `GoRPC`的设计与部分实现思路参考：
 - https://github.com/geektutu/7days-golang
 
 许可证与声明已保留：
 - `LICENSE`
 - `THIRD_PARTY_NOTICES.md`
 
-## 9. 后续计划
+## 8. 后续计划
 
 - 完成 `GoRPC` 模块
 - GoGee 增强参数校验与路由命名
@@ -234,3 +192,7 @@ go test ./...
 - GoLock 增加 etcd 实现
 - GoMQ 增加重试队列 / 延迟队列
 - GoBench 增加 CSV 对比报告与基准历史归档
+- 
+## 9. 测试结果与复现（新增）
+- 五框架最新测试结果：`GoBench/reports/summary_report.md`
+- 详细说明与重跑步骤：`GoBench/README.md`

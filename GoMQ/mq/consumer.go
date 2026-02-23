@@ -29,7 +29,7 @@ func (c *Client) Consume(ctx context.Context, handler HandlerFunc) error {
 	if err != nil {
 		return err
 	}
-
+	// 关于 <-chan 类型 为只读 chan 即不可以向其中写入数据 比如 chan <- v 此处为内部 rabbitmq 实现 返回的只读 chan
 	for {
 		select {
 		case <-ctx.Done():
@@ -60,7 +60,7 @@ func (c *Client) ConsumeWorkers(ctx context.Context, workers int, handler Handle
 	if err != nil {
 		return err
 	}
-	workerCtx, cancel := context.WithCancel(ctx)
+	workerCtx, cancel := context.WithCancel(ctx) // 用于任何一个 worker 出错 都会作用到全体宕机
 	defer cancel()
 
 	errCh := make(chan error, 1)
@@ -127,17 +127,17 @@ func (c *Client) processDelivery(ctx context.Context, raw amqp.Delivery, handler
 	})
 	if cc.AutoAck {
 		return nil
-	}
+	} // 自动 ack
 	if err != nil {
 		if nackErr := raw.Nack(false, cc.RequeueOnError); nackErr != nil {
 			return nackErr
-		}
+		} // handle 失败 是否重新放回队列
 		return nil
 	}
-	return raw.Ack(false)
+	return raw.Ack(false) // 确认成功
 }
 
-func mapFromTable(t amqp.Table) map[string]interface{} {
+func mapFromTable(t amqp.Table) map[string]interface{} { // 该函数的作用是利于更换不同的 mq
 	if len(t) == 0 {
 		return nil
 	}

@@ -16,12 +16,12 @@ type HTTPBenchConfig struct {
 	Total       int
 	Concurrency int
 	Timeout     time.Duration
-	Warmup      int
+	Warmup      int // 预热请求数
 	Body        string
 	HeaderText  string
 }
 
-type httpResult struct {
+type httpResult struct { // 单次请求结构体
 	latency time.Duration
 	status  int
 	ok      bool
@@ -46,12 +46,12 @@ func runHTTPBenchmark(name, reportPath string, cfg HTTPBenchConfig) error {
 	headers := parseHeaders(cfg.HeaderText)
 	client := &http.Client{Timeout: cfg.Timeout}
 
-	for i := 0; i < cfg.Warmup; i++ {
+	for i := 0; i < cfg.Warmup; i++ { // 预热请求
 		_ = doOneHTTP(client, cfg, headers)
 	}
 
 	results := make(chan httpResult, cfg.Total)
-	jobs := make(chan struct{}, cfg.Total)
+	jobs := make(chan struct{}, cfg.Total) // 并发 jobs 数量
 
 	var wg sync.WaitGroup
 	worker := func() {
@@ -66,7 +66,7 @@ func runHTTPBenchmark(name, reportPath string, cfg HTTPBenchConfig) error {
 	}
 
 	start := time.Now()
-	for i := 0; i < cfg.Total; i++ {
+	for i := 0; i < cfg.Total; i++ { // 统计纯执行时间
 		jobs <- struct{}{}
 	}
 	close(jobs)
@@ -77,7 +77,7 @@ func runHTTPBenchmark(name, reportPath string, cfg HTTPBenchConfig) error {
 	var (
 		success     int
 		failed      int
-		latencies   []time.Duration
+		latencies   []time.Duration // 延时统计
 		statusStats = make(map[int]int)
 		errorStats  = make(map[string]int)
 	)
@@ -103,7 +103,7 @@ func runHTTPBenchmark(name, reportPath string, cfg HTTPBenchConfig) error {
 	if total > 0 {
 		successRate = float64(success) / float64(total)
 	}
-	qps := 0.0
+	qps := 0.0 // qps 平均每秒请求数量
 	if duration > 0 {
 		qps = float64(total) / duration.Seconds()
 	}
@@ -148,7 +148,7 @@ func runHTTPBenchmark(name, reportPath string, cfg HTTPBenchConfig) error {
 }
 
 func doOneHTTP(client *http.Client, cfg HTTPBenchConfig, headers map[string]string) httpResult {
-	body := strings.NewReader(cfg.Body)
+	body := strings.NewReader(cfg.Body) // 包装为一个 io.reader
 	req, err := http.NewRequestWithContext(context.Background(), cfg.Method, cfg.URL, body)
 	if err != nil {
 		return httpResult{ok: false, err: "build_request_error"}
@@ -164,7 +164,7 @@ func doOneHTTP(client *http.Client, cfg HTTPBenchConfig, headers map[string]stri
 		return httpResult{latency: latency, ok: false, err: "request_error"}
 	}
 	defer resp.Body.Close()
-	_, _ = io.Copy(io.Discard, resp.Body)
+	_, _ = io.Copy(io.Discard, resp.Body) // 不读完 body qps 会降低 原因是在需要建立 TCP 请求 如果不读取 body 的话会重新建立 tpc 连接
 
 	ok := resp.StatusCode >= 200 && resp.StatusCode < 400
 	errCode := ""

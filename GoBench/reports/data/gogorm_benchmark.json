@@ -1,0 +1,36 @@
+{
+  "name": "gogorm-benchmark",
+  "mode": "gorm",
+  "start_at": "2026-02-23T21:21:59+08:00",
+  "end_at": "2026-02-23T21:22:08+08:00",
+  "duration_ms": 9191,
+  "summary": {
+    "total": 3501,
+    "success": 3501,
+    "failed": 0,
+    "success_rate": 1,
+    "qps": 380.91144699935455,
+    "avg_latency_ms": 2.6029502999142964,
+    "p50_latency_ms": 2.093,
+    "p90_latency_ms": 4.058,
+    "p95_latency_ms": 6.738,
+    "p99_latency_ms": 14.047,
+    "max_latency_ms": 170.032
+  },
+  "extra": {
+    "db_path": "reports/data/gogorm_bench",
+    "delete_ops": 500,
+    "insert_ops": 2000,
+    "query_ops": 500,
+    "record_not_found_symbol": "record not found",
+    "remaining_rows": 1500,
+    "stage_ms": {
+      "count": 0,
+      "delete": 1780,
+      "insert": 4707,
+      "query": 89,
+      "update": 1372
+    },
+    "update_ops": 500
+  }
+}

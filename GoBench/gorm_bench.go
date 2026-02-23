@@ -65,7 +65,7 @@ func runGormBenchmark(name, reportPath string, cfg GormBenchConfig) error {
 
 	stageDuration := map[string]int64{}
 	errorStats := map[string]int{}
-	latencies := make([]time.Duration, 0, cfg.InsertOps+cfg.QueryOps+cfg.UpdateOps+cfg.DeleteOps+1)
+	latencies := make([]time.Duration, 0, cfg.InsertOps+cfg.QueryOps+cfg.UpdateOps+cfg.DeleteOps+1) // 每种操作延迟
 	success := 0
 	failed := 0
 
@@ -82,14 +82,14 @@ func runGormBenchmark(name, reportPath string, cfg GormBenchConfig) error {
 
 	startAll := time.Now()
 
-	for i := 0; i < cfg.InsertOps; i++ {
+	for i := 0; i < cfg.InsertOps; i++ { // insert 操作
 		u := &benchUser{Name: fmt.Sprintf("user_%06d", i), Age: i % 80, City: "shanghai"}
 		start := time.Now()
 		_, err = s.Insert(u)
 		record("insert", time.Since(start), err)
 	}
 
-	for i := 0; i < cfg.QueryOps; i++ {
+	for i := 0; i < cfg.QueryOps; i++ { // query 操作
 		target := fmt.Sprintf("user_%06d", i%cfg.InsertOps)
 		var u benchUser
 		start := time.Now()
@@ -97,20 +97,21 @@ func runGormBenchmark(name, reportPath string, cfg GormBenchConfig) error {
 		record("query", time.Since(start), err)
 	}
 
-	for i := 0; i < cfg.UpdateOps; i++ {
+	for i := 0; i < cfg.UpdateOps; i++ { // update 操作
 		target := fmt.Sprintf("user_%06d", i%cfg.InsertOps)
 		start := time.Now()
 		_, err = s.Where("Name = ?", target).Update("Age", 100+i%20)
 		record("update", time.Since(start), err)
 	}
 
-	for i := 0; i < cfg.DeleteOps; i++ {
+	for i := 0; i < cfg.DeleteOps; i++ { // delete 操作
 		target := fmt.Sprintf("user_%06d", i)
 		start := time.Now()
 		_, err = s.Where("Name = ?", target).Delete()
 		record("delete", time.Since(start), err)
 	}
 
+	// count 阶段
 	startCount := time.Now()
 	remaining, countErr := s.Count()
 	record("count", time.Since(startCount), countErr)

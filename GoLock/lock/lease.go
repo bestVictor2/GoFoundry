@@ -84,7 +84,7 @@ func (l *Lease) KeepAlive(ctx context.Context, interval time.Duration) <-chan er
 	}
 
 	if interval <= 0 {
-		interval = l.ttl / 3
+		interval = l.ttl / 3 // 防止网络抖动
 	}
 	if interval <= 0 {
 		errCh <- ErrTTLInvalid
@@ -96,7 +96,7 @@ func (l *Lease) KeepAlive(ctx context.Context, interval time.Duration) <-chan er
 		defer close(errCh)
 		ticker := time.NewTicker(interval)
 		defer ticker.Stop()
-
+		// 通过 for 循环进行循环刷新
 		for {
 			select {
 			case <-ctx.Done():

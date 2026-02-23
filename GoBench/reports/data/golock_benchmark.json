@@ -1,0 +1,16 @@
+﻿{
+    "framework":  "GoLock",
+    "mode":  "benchmark",
+    "run_at":  "2026-02-23T21:27:03+08:00",
+    "benchmarks":  [
+                       {
+                           "name":  "TryLockUnlock",
+                           "iterations":  6324,
+                           "ns_per_op":  161148,
+                           "ms_per_op":  0.161148,
+                           "qps":  6205.48,
+                           "bytes_per_op":  196152,
+                           "allocs_per_op":  806
+                       }
+                   ]
+}
