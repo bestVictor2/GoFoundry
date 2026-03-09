@@ -199,6 +199,6 @@ func (routerGroup *RouterGroup) Static(relativePath string, root string) {
 
 func Default() *Engine {
 	engine := New()
-	engine.Use(Logger(), Recovery())
+	engine.Use(Logger(), Recovery()) // unsafe
 	return engine
 }
